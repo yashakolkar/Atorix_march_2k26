@@ -35,7 +35,6 @@ function LeadStatusDistribution() {
 
   return (
     <div className="bg-white dark:bg-[#1e293b] rounded-lg shadow p-6 h-full border border-gray-200 dark:border-gray-700">
-
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white">
@@ -56,7 +55,6 @@ function LeadStatusDistribution() {
 
       {/* Body */}
       <div className="flex gap-8 items-center justify-center">
-
         {/* Donut */}
         <div className="relative w-44 h-44">
           <svg width="176" height="176" viewBox="0 0 176 176">
@@ -102,7 +100,9 @@ function LeadStatusDistribution() {
             >
               <div className="flex items-center gap-3">
                 <span className={`w-3 h-3 rounded-full ${item.dot}`}></span>
-                <span className="text-gray-700 dark:text-gray-300">{item.label}</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  {item.label}
+                </span>
               </div>
               <div className="text-gray-600">
                 {item.count} ({item.displayPercent}%)
@@ -126,19 +126,21 @@ export default function Analytics() {
 
   // paginations
   const [page, setPage] = useState(1);
-const limit = 8;  
-const totalPages = Math.ceil(activities.length / limit);
+  const limit = 8;
+  const totalPages = Math.ceil(activities.length / limit);
 
-const paginatedActivities = activities.slice(
-  (page - 1) * limit,
-  page * limit
-);
+  const paginatedActivities = activities.slice(
+    (page - 1) * limit,
+    page * limit,
+  );
 
   useEffect(() => {
     const fetchLeads = async () => {
       try {
         const response = await apiRequest(API_ENDPOINTS.BUSINESS_LEADS);
-        const leadsData = Array.isArray(response) ? response : response?.data || [];
+        const leadsData = Array.isArray(response)
+          ? response
+          : response?.data || [];
         setLeads(leadsData);
       } catch (err) {
         setError("Failed to load lead data");
@@ -170,7 +172,9 @@ const paginatedActivities = activities.slice(
           }
         });
 
-        setSapData(Object.keys(counts).map((key) => ({ name: key, count: counts[key] })));
+        setSapData(
+          Object.keys(counts).map((key) => ({ name: key, count: counts[key] })),
+        );
       } catch (err) {
         console.error("SAP chart error:", err);
       }
@@ -193,15 +197,20 @@ const paginatedActivities = activities.slice(
   const metrics = useMemo(() => {
     const totalLeads = leads.length;
     const newLeads = leads.filter((l) => l?.status === "new").length;
-    const contactedLeads = leads.filter((l) => l?.status === "contacted").length;
-    const qualifiedLeads = leads.filter((l) => l?.status === "qualified").length;
+    const contactedLeads = leads.filter(
+      (l) => l?.status === "contacted",
+    ).length;
+    const qualifiedLeads = leads.filter(
+      (l) => l?.status === "qualified",
+    ).length;
 
     return {
       totalLeads,
       newLeads,
       contactedLeads,
       qualifiedLeads,
-      conversionRate: totalLeads > 0 ? Math.round((qualifiedLeads / totalLeads) * 100) : 0,
+      conversionRate:
+        totalLeads > 0 ? Math.round((qualifiedLeads / totalLeads) * 100) : 0,
     };
   }, [leads]);
 
@@ -210,19 +219,48 @@ const paginatedActivities = activities.slice(
 
   return (
     <ProtectedRoute>
-      <AdminLayout title="Analytics" description="View detailed analytics and insights.">
-
+      <AdminLayout
+        title="Analytics"
+        description="View detailed analytics and insights."
+      >
         {/* Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10" >
-          <MetricCard className="pl-10 pr-10" title="Total Leads" value={metrics.totalLeads} change="+12%" icon={<Users className="w-7 h-6" />} color="blue" />
-          <MetricCard className="pl-10 pr-10" title="New Leads" value={metrics.newLeads} change="+5%" icon={<Users className="w-7 h-6" />} color="purple" />
-          <MetricCard className="pl-10 pr-10" title="Contacted" value={metrics.contactedLeads} change="+8%" icon={<Clock className="w-7 h-6" />} color="green" />
-          <MetricCard className="pl-10 pr-10" title="Qualified" value={metrics.qualifiedLeads} change={`${metrics.conversionRate}%`} icon={<CheckCircle className="w-7 h-6" />} color="indigo" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <MetricCard
+            className="pl-10 pr-10"
+            title="Total Leads"
+            value={metrics.totalLeads}
+            change="+12%"
+            icon={<Users className="w-7 h-6" />}
+            color="blue"
+          />
+          <MetricCard
+            className="pl-10 pr-10"
+            title="New Leads"
+            value={metrics.newLeads}
+            change="+5%"
+            icon={<Users className="w-7 h-6" />}
+            color="purple"
+          />
+          <MetricCard
+            className="pl-10 pr-10"
+            title="Contacted"
+            value={metrics.contactedLeads}
+            change="+8%"
+            icon={<Clock className="w-7 h-6" />}
+            color="green"
+          />
+          <MetricCard
+            className="pl-10 pr-10"
+            title="Qualified"
+            value={metrics.qualifiedLeads}
+            change={`${metrics.conversionRate}%`}
+            icon={<CheckCircle className="w-7 h-6" />}
+            color="indigo"
+          />
         </div>
 
         {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-
           <LeadStatusDistribution />
 
           <div className="bg-white dark:bg-[#1e293b] rounded-lg shadow p-6 h-full border border-gray-200 dark:border-gray-700">
@@ -241,94 +279,89 @@ const paginatedActivities = activities.slice(
               </ResponsiveContainer>
             </div>
           </div>
-
         </div>
 
         {/* Recent Activity */}
         {/* <thead className="bg-gray-50 dark:bg-gray-800"> */}
-          
-          {/* Recent Activity */}
 
-<div className="bg-white dark:bg-[#1e293b] rounded-lg shadow overflow-hidden border border-gray-200 dark:border-gray-700">
+        {/* Recent Activity */}
 
-  <div className="p-6">
-    <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-      Recent Activities
-    </h2>
+        <div className="bg-white dark:bg-[#1e293b] rounded-lg shadow overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div className="p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+              Recent Activities
+            </h2>
 
-    <div className="overflow-x-auto">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    {["Action", "Target", "User", "Type", "Date"].map((h) => (
+                      <th
+                        key={h}
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase"
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
 
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-white dark:bg-[#1e293b] divide-y divide-gray-200 dark:divide-gray-700">
+                  {paginatedActivities.map((log, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                    >
+                      <td className="px-6 py-4 text-gray-900 dark:text-white">
+                        {log.action}
+                      </td>
+                      <td className="px-6 py-4 text-gray-900 dark:text-white">
+                        {log.target}
+                      </td>
+                      <td className="px-6 py-4 text-gray-900 dark:text-white">
+                        {log.details?.performedBy?.name || log.userEmail}
+                      </td>
+                      <td className="px-6 py-4 text-gray-900 dark:text-white">
+                        {log.target === "JobApplication"
+                          ? "Job Application"
+                          : "Business"}
+                      </td>
+                      <td className="px-6 py-4 text-gray-900 dark:text-white">
+                        {new Date(log.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {/* Pagination */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Page <span className="font-medium">{page}</span> of{" "}
+                  <span className="font-medium">{totalPages}</span>
+                </p>
 
-        <thead className="bg-gray-50 dark:bg-gray-800">
-          <tr>
-            {["Action", "Target", "User", "Type", "Date"].map((h) => (
-              <th
-                key={h}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase"
-              >
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
+                <div className="flex items-center gap-2">
+                  <button
+                    disabled={page === 1}
+                    onClick={() => setPage(page - 1)}
+                    className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-600 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40"
+                  >
+                    Previous
+                  </button>
 
-        <tbody className="bg-white dark:bg-[#1e293b] divide-y divide-gray-200 dark:divide-gray-700">
-          {paginatedActivities.map((log, index) => (
-            <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-              <td className="px-6 py-4 text-gray-900 dark:text-white">{log.action}</td>
-              <td className="px-6 py-4 text-gray-900 dark:text-white">{log.target}</td>
-              <td className="px-6 py-4 text-gray-900 dark:text-white">
-                {log.details?.performedBy?.name || log.userEmail}
-              </td>
-              <td className="px-6 py-4 text-gray-900 dark:text-white">
-                {log.target === "JobApplication" ? "Job Application" : "Business"}
-              </td>
-              <td className="px-6 py-4 text-gray-900 dark:text-white">
-                {new Date(log.createdAt).toLocaleDateString()}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-
-      </table>
-      {/* Pagination */}
-<div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-gray-200 dark:border-gray-700">
-
-  <p className="text-sm text-gray-600 dark:text-gray-400">
-    Page <span className="font-medium">{page}</span> of{" "}
-    <span className="font-medium">{totalPages}</span>
-  </p>
-
-  <div className="flex items-center gap-2">
-
-    <button
-      disabled={page === 1}
-      onClick={() => setPage(page - 1)}
-      className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-600 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40"
-    >
-      Previous
-    </button>
-
-    <button
-      disabled={page === totalPages}
-      onClick={() => setPage(page + 1)}
-      className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-600 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40"
-    >
-      Next
-    </button>
-
-  </div>
-
-</div>
-
-
-
-    </div>
-  </div>
-
-</div>
-
+                  <button
+                    disabled={page === totalPages}
+                    onClick={() => setPage(page + 1)}
+                    className="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-600 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </AdminLayout>
     </ProtectedRoute>
   );
@@ -348,16 +381,20 @@ function MetricCard({ title, value, change, icon, color = "blue" }) {
     <div className="bg-white dark:bg-[#1e293b] rounded-lg shadow p- border border-gray-200 dark:border-gray-700">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">{value}</p>
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            {title}
+          </p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+            {value}
+          </p>
           <div className="flex items-center mt-1">
             <TrendingUp className="w-4 h-4 text-green-500" />
-            <span className="text-xs ml-1 text-green-600">{change} from last period</span>
+            <span className="text-xs ml-1 text-green-600">
+              {change} from last period
+            </span>
           </div>
         </div>
-        <div className={`p-3 rounded-full ${colorClasses[color]}`}>
-          {icon}
-        </div>
+        <div className={`p-3 rounded-full ${colorClasses[color]}`}>{icon}</div>
       </div>
     </div>
   );
