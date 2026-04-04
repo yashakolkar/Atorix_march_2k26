@@ -23,6 +23,10 @@ const nextConfig = {
       "lucide-react",
       "recharts",
       "@radix-ui/react-icons",
+      "@react-three/drei",
+      "@react-three/fiber",
+      "date-fns",
+      "react-hook-form",
     ],
     serverActions: true,
   },
@@ -79,6 +83,16 @@ const nextConfig = {
           },
         ],
       },
+      // ✅ Cache JS/CSS chunks for 1 year (they have hashed filenames)
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
 
@@ -95,8 +109,9 @@ const nextConfig = {
       // Better chunk splitting for caching
       config.optimization.splitChunks = {
         chunks: "all",
-        maxInitialRequests: 25,
-        minSize: 20000,
+        maxInitialRequests: 30,
+        minSize: 15000,
+        maxSize: 200000, // ✅ Break large chunks into ≤200KB pieces
         cacheGroups: {
           // Separate heavy libs into their own chunks
           framework: {
@@ -109,22 +124,30 @@ const nextConfig = {
           framerMotion: {
             name: "framer-motion",
             test: /[\\/]node_modules[\\/](framer-motion)[\\/]/,
-            chunks: "all",
+            chunks: "async", // ✅ Changed to async — only load when needed
             priority: 30,
             enforce: true,
           },
           threeJs: {
             name: "three-js",
             test: /[\\/]node_modules[\\/](@react-three|three)[\\/]/,
-            chunks: "all",
+            chunks: "async", // ✅ Changed to async — 3D is never needed on first paint
             priority: 30,
             enforce: true,
           },
           recharts: {
             name: "recharts",
             test: /[\\/]node_modules[\\/](recharts|d3-.*)[\\/]/,
-            chunks: "all",
+            chunks: "async", // ✅ Changed to async
             priority: 30,
+            enforce: true,
+          },
+          // ✅ Separate mongoose/openai (server-only, should not be in client bundle)
+          serverOnly: {
+            name: "server-only",
+            test: /[\\/]node_modules[\\/](mongoose|openai)[\\/]/,
+            chunks: "async",
+            priority: 35,
             enforce: true,
           },
           vendor: {
@@ -132,7 +155,7 @@ const nextConfig = {
             test: /[\\/]node_modules[\\/]/,
             chunks: "all",
             priority: 10,
-            enforce: true,
+            reuseExistingChunk: true,
           },
         },
       };

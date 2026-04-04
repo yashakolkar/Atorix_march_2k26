@@ -9,9 +9,12 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
 
+  // ✅ Safelist only classes that are dynamically generated
+  // Remove this if you don't use dynamic class names
+  // safelist: [],
+
   theme: {
     extend: {
-      /* ✅ ADDED THIS BLOCK ONLY */
       fontFamily: {
         times: ['"Times New Roman"', "serif"],
       },

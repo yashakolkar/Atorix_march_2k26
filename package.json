@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "bunx biome lint --write && bunx tsc --noEmit",
-    "format": "bunx biome format --write"
+    "format": "bunx biome format --write",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.17.12",
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.5.9",
     "@types/node": "^20.19.25",
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
