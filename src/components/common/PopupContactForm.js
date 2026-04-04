@@ -255,7 +255,7 @@ function CountryDropdown({ value, open, onToggle, onSelect }) {
       return;
     }
     const handle = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) onToggle(false);
+      if (ref.current && !ref.current.contains(e.target)) onToggle(true);
     };
     document.addEventListener("mousedown", handle);
     setTimeout(() => searchRef.current?.focus(), 60);
@@ -365,7 +365,7 @@ function SuccessMessage() {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function PopupContactForm() {
-  const [open, setOpen] = useState(tru); // ✅ Start closed, open after delay
+  const [open, setOpen] = useState(false); // ✅ Start closed, open after delay
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -382,7 +382,7 @@ export default function PopupContactForm() {
     )
       return;
 
-    const id = setTimeout(() => setOpen(true), 2000);
+    const id = setTimeout(() => setOpen(true), 1000);
     return () => clearTimeout(id);
   }, []);
 
