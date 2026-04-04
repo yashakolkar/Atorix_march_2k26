@@ -278,7 +278,7 @@ function CountryDropdown({ value, open, onToggle, onSelect }) {
       <button
         type="button"
         onClick={() => onToggle(!open)}
-        className="flex items-center gap-1.5 h-full min-w-[88px] px-2.5 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/60 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200 whitespace-nowrap"
+        className="flex items-center gap-1.5 h-full min-w-[88px] px-2.5 py-2 text-xs font-medium rounded-lg border border-gray-201 dark:border-gray-700 bg-white/80 dark:bg-gray-800/60 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200 whitespace-nowrap"
       >
         {selected && (
           <span className="text-base leading-none">{selected.flag}</span>
