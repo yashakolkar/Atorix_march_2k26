@@ -365,7 +365,7 @@ function SuccessMessage() {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function PopupContactForm() {
-  const [open, setOpen] = useState(true); // ✅ Start closed, open after delay
+  const [open, setOpen] = useState(tru); // ✅ Start closed, open after delay
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -456,7 +456,7 @@ export default function PopupContactForm() {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-50 animate-in fade-in duration-200"
+        className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
         onClick={handleClose}
       />
 
@@ -472,7 +472,7 @@ export default function PopupContactForm() {
           onClick={(e) => e.stopPropagation()}
         >
           {/* ✅ Removed particle canvas — CSS gradient is sufficient */}
-          <div className="absolute inset-0 " />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-700 to-indigo-900" />
 
           {/* Close button */}
           <button
@@ -484,10 +484,10 @@ export default function PopupContactForm() {
           </button>
 
           {/* Main content */}
-          <div className="relative z-10 flex flex-col lg:flex-row w-full h-full bg-white/95 dark:bg-gray-900/90  overflow-auto">
+          <div className="relative z-10 flex flex-col lg:flex-row w-full h-full bg-white/95 dark:bg-gray-900/90 backdrop-blur-md overflow-auto">
             {/* ── Left panel (hidden on mobile) ── */}
             <div className="hidden lg:flex lg:w-5/12 xl:w-1/2 relative shrink-0">
-              <div className="absolute inset-0 flex items-center justify-center p-6">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-700 to-indigo-900 flex items-center justify-center p-6">
                 {/* ✅ SAP image with proper sizes for responsive delivery */}
                 <Image
                   alt="SAP"
@@ -505,7 +505,7 @@ export default function PopupContactForm() {
             {/* ── Right panel (form) ── */}
             <div className="flex flex-col w-full lg:w-7/12 xl:w-1/2">
               {/* Header */}
-              <div className=" px-5 py-4 shrink-0">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-4 shrink-0">
                 <div className="flex items-center justify-center gap-2">
                   <div className="scale-75 sm:scale-90">
                     <div className="bg-gradient-to-r from-black to-gray-900 rounded-full px-4 py-1.5 border border-pink-500/40 shadow-[0_0_20px_rgba(236,72,153,0.6)] flex items-center">
