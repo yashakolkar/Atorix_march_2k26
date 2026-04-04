@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -14,7 +14,17 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useTheme } from "@/components/ui/theme-provider";
-import { motion } from "framer-motion";
+
+// ✅ Lazy load framer-motion — saves ~60KB from initial bundle
+import dynamic from "next/dynamic";
+const MotionDiv = dynamic(
+  () =>
+    import("framer-motion").then((m) => {
+      const { motion } = m;
+      return { default: motion.div };
+    }),
+  { ssr: false, loading: () => <div /> },
+);
 
 import servicesData from "@/data/services.json";
 
@@ -27,14 +37,15 @@ const navLinks = [
   { name: "Careers", path: "/career" },
 ];
 
-export function NeonLogoBorder({
+// ✅ Memoized logo component to prevent unnecessary re-renders
+export const NeonLogoBorder = memo(function NeonLogoBorder({
   width = 110,
   height = 30,
   className = "",
   isMobile = false,
 }) {
   const { theme } = useTheme();
-  const containerSize = isMobile ? "p-0.5" : "p-0.5";
+  const containerSize = "p-0.5";
   const innerPadding = "pl-2 pr-0 py-1";
   const logoContainerClass = `relative ${containerSize} ${className} flex items-center justify-center`;
 
@@ -57,6 +68,7 @@ export function NeonLogoBorder({
 
         <div className="flex items-center z-30">
           <div className="flex items-center z-30">
+            {/* ✅ Logo: explicit width/height matching displayed size, no fill */}
             <div className="relative w-10 h-10">
               <Image
                 src={
@@ -65,11 +77,14 @@ export function NeonLogoBorder({
                     : "/Webp/atorix-logo.webp"
                 }
                 alt="Atorix Logo"
-                fill
-                className="relative z-30 object-contain F"
+                width={40}
+                height={40}
+                sizes="40px"
+                className="relative z-30 object-contain"
                 priority
               />
             </div>
+            {/* ✅ Text logo: sized to displayed dimensions */}
             <Image
               src={
                 isLightMode
@@ -79,6 +94,7 @@ export function NeonLogoBorder({
               alt="Atorix"
               width={width - 25}
               height={height}
+              sizes={`${width - 25}px`}
               className="object-contain relative z-30"
               priority
             />
@@ -142,7 +158,7 @@ export function NeonLogoBorder({
       `}</style>
     </div>
   );
-}
+});
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -162,11 +178,19 @@ export default function Navbar() {
   const isServicePath = pathname.startsWith("/services");
   const isBlogPath = pathname.includes("/blog");
 
+  // ✅ Passive scroll listener + requestAnimationFrame to avoid forced reflow
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 10);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -177,36 +201,36 @@ export default function Navbar() {
     }
   }, [pathname, isSheetOpen]);
 
-  const handleServicesMouseEnter = () => {
+  const handleServicesMouseEnter = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
     setIsServicesOpen(true);
-  };
+  }, []);
 
-  const handleServicesMouseLeave = () => {
+  const handleServicesMouseLeave = useCallback(() => {
     timeoutRef.current = setTimeout(() => {
       setIsServicesOpen(false);
       setOpenCategory(null);
     }, 200);
-  };
+  }, []);
 
-  const handleCategoryMouseEnter = (categoryId) => {
+  const handleCategoryMouseEnter = useCallback((categoryId) => {
     if (subMenuTimeoutRef.current) {
       clearTimeout(subMenuTimeoutRef.current);
       subMenuTimeoutRef.current = null;
     }
     setOpenCategory(categoryId);
-  };
+  }, []);
 
-  const handleCategoryMouseLeave = () => {
+  const handleCategoryMouseLeave = useCallback(() => {
     subMenuTimeoutRef.current = setTimeout(() => {
       setOpenCategory(null);
     }, 200);
-  };
+  }, []);
 
-  const handleDropdownClick = () => {
+  const handleDropdownClick = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -215,21 +239,24 @@ export default function Navbar() {
       clearTimeout(subMenuTimeoutRef.current);
       subMenuTimeoutRef.current = null;
     }
-  };
+  }, []);
 
-  const toggleCategory = (categoryId) => {
-    setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
-  };
+  const toggleCategory = useCallback(
+    (categoryId) => {
+      setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
+    },
+    [expandedCategory],
+  );
 
-  const handleSheetOpenChange = (open) => {
+  const handleSheetOpenChange = useCallback((open) => {
     setIsSheetOpen(open);
-  };
+  }, []);
 
-  const closeSheet = () => {
+  const closeSheet = useCallback(() => {
     if (sheetCloseRef.current) {
       sheetCloseRef.current.click();
     }
-  };
+  }, []);
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -255,7 +282,7 @@ export default function Navbar() {
             <div
               className="
  h-16
-flex items-center justify-center lg:justify-between lg:justify-between
+flex items-center justify-center lg:justify-between
 w-full
 px-2 md:px-6 lg:px-8
 rounded-full
@@ -370,11 +397,8 @@ relative backdrop-blur-md shadow-sm"
 
               {/* Right Side Actions */}
               <div className="flex items-center space-x-2 sm:space-x-4">
-                {/* Get Demo Button - Visible on all screen sizes */}
-                <motion.div
-                  variants={itemVariants}
-                  className="flex items-center"
-                >
+                {/* Get Demo Button */}
+                <div className="flex items-center">
                   <Button
                     asChild
                     className="gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium bg-gradient-hero shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 relative overflow-hidden group btn-3d whitespace-nowrap"
@@ -386,7 +410,7 @@ relative backdrop-blur-md shadow-sm"
                       </span>
                     </Link>
                   </Button>
-                </motion.div>
+                </div>
 
                 <ThemeToggle />
 
@@ -518,34 +542,28 @@ relative backdrop-blur-md shadow-sm"
             className={`
     h-14
     flex items-center justify-between
-
     w-full
-    max-w-[360px]     /* LOCKED SIZE for phones + tablets */
+    max-w-[360px]
     mx-auto
     pr-6
     gap-2
-
     rounded-full
     border-2
     backdrop-blur-md
     shadow-sm
     relative
-
     transition-all duration-300
-
-    /* DESKTOP ONLY */
     lg:max-w-7xl
     lg:pr-8
     lg:gap-10
-
-    ${isIndustriesPage ? "bg-black/80  dark:bg-black/90" : "bg-background/95"}
+    ${isIndustriesPage ? "bg-black/80 dark:bg-black/90" : "bg-background/95"}
   `}
             style={{
               borderColor: "#DF7D13",
               boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
             }}
           >
-            {/* Logo - LEFT SIDE */}
+            {/* Logo */}
             <Link href="/" className="shrink-0">
               {" "}
               <NeonLogoBorder width={85} height={25} />
@@ -697,7 +715,7 @@ relative backdrop-blur-md shadow-sm"
 
             {/* Right side actions */}
             <div className="flex items-center gap-2 shrink-0">
-              <motion.div variants={itemVariants} className="flex items-center">
+              <div className="flex items-center">
                 <Button
                   asChild
                   size="sm"
@@ -710,7 +728,7 @@ relative backdrop-blur-md shadow-sm"
                     </span>
                   </Link>
                 </Button>
-              </motion.div>
+              </div>
               <ThemeToggle />
               <Button
                 variant="ghost"

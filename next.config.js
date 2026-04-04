@@ -9,48 +9,30 @@ const withPWA = require("next-pwa")({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
 
+  // ─── Remove console.log in production ──────────────────────
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+
+  // ─── Experimental optimizations ────────────────────────────
   experimental: {
-    // serverActions: true,
-    optimizePackageImports: ["framer-motion"],
+    optimizePackageImports: [
+      "framer-motion",
+      "lucide-react",
+      "recharts",
+      "@radix-ui/react-icons",
+    ],
+    serverActions: true,
   },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-      };
-    }
-    // next.config.js
-    module.exports = {
-      images: {
-        imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-      },
-    };
 
-    // Split chunks for better caching
-    config.optimization.splitChunks = {
-      chunks: "all",
-      maxInitialRequests: 10,
-      minSize: 0,
-      cacheGroups: {
-        vendor: {
-          name: "vendor",
-          test: /[\\/]node_modules[\\/]/,
-          chunks: "all",
-          priority: 10,
-          enforce: true,
-        },
-      },
-    };
-
-    return config;
-  },
+  // ─── Image optimization ────────────────────────────────────
   images: {
     formats: ["image/avif", "image/webp"],
-    deviceSizes: [640, 750, 828, 1080, 1200],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 31536000, // 1 year cache
     domains: [
       "source.unsplash.com",
       "images.unsplash.com",
@@ -78,41 +60,93 @@ const nextConfig = {
         hostname: "ugc.same-assets.com",
         pathname: "/**",
       },
-      // From integrated file - Allow all domains
       {
         protocol: "https",
-        hostname: "**", // Allow all domains
+        hostname: "**",
       },
     ],
   },
+
+  // ─── Headers for caching ───────────────────────────────────
+  async headers() {
+    return [
+      {
+        source: "/:all*(svg|jpg|jpeg|png|webp|avif|ico|woff|woff2)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
+  },
+
+  // ─── Webpack optimizations ─────────────────────────────────
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+
+      // Better chunk splitting for caching
+      config.optimization.splitChunks = {
+        chunks: "all",
+        maxInitialRequests: 25,
+        minSize: 20000,
+        cacheGroups: {
+          // Separate heavy libs into their own chunks
+          framework: {
+            name: "framework",
+            test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+            chunks: "all",
+            priority: 40,
+            enforce: true,
+          },
+          framerMotion: {
+            name: "framer-motion",
+            test: /[\\/]node_modules[\\/](framer-motion)[\\/]/,
+            chunks: "all",
+            priority: 30,
+            enforce: true,
+          },
+          threeJs: {
+            name: "three-js",
+            test: /[\\/]node_modules[\\/](@react-three|three)[\\/]/,
+            chunks: "all",
+            priority: 30,
+            enforce: true,
+          },
+          recharts: {
+            name: "recharts",
+            test: /[\\/]node_modules[\\/](recharts|d3-.*)[\\/]/,
+            chunks: "all",
+            priority: 30,
+            enforce: true,
+          },
+          vendor: {
+            name: "vendor",
+            test: /[\\/]node_modules[\\/]/,
+            chunks: "all",
+            priority: 10,
+            enforce: true,
+          },
+        },
+      };
+    }
+
+    return config;
+  },
+
   typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    // Adjust any experimental features as needed
-    serverActions: true, // From integrated file
-  },
-  // API proxy configuration (from integrated file)
 };
 
-module.exports = {
-  // Drop IE11 polyfills
-  browsersListForSwc: true,
-  // OR set in package.json:
-};
-// Set port for development (from integrated file)
-if (process.env.NODE_ENV === "development") {
-  process.env.PORT = "3000";
-  process.env.HOST = "0.0.0.0";
-}
-module.exports = {
-  swcMinify: true,
-  compiler: {
-    removeConsole: true,
-  },
-};
-
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);
