@@ -8,9 +8,9 @@ import {
   ShieldCheck,
   Globe2,
   Workflow,
-  HeartHandshake
+  HeartHandshake,
 } from "lucide-react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import { useState } from "react";
 
 // Features data
@@ -18,43 +18,51 @@ const features = [
   {
     icon: <Settings className="h-8 w-8 text-primary" />,
     title: "Customized Solutions",
-    description: "We tailor SAP implementations to your specific business needs, ensuring you get maximum value from your investment."
+    description:
+      "We tailor SAP implementations to your specific business needs, ensuring you get maximum value from your investment.",
   },
   {
     icon: <Users className="h-8 w-8 text-primary" />,
     title: "Expert Team",
-    description: "Our certified SAP consultants bring years of experience across industries to solve your most complex challenges."
+    description:
+      "Our certified SAP consultants bring years of experience across industries to solve your most complex challenges.",
   },
   {
     icon: <BarChart3 className="h-8 w-8 text-primary" />,
     title: "Data Analytics",
-    description: "Transform your data into actionable insights with our advanced SAP analytics and reporting solutions."
+    description:
+      "Transform your data into actionable insights with our advanced SAP analytics and reporting solutions.",
   },
   {
     icon: <Clock className="h-8 w-8 text-primary" />,
     title: "Faster Implementation",
-    description: "Our accelerated implementation methodology reduces project timelines and gets you up and running quickly."
+    description:
+      "Our accelerated implementation methodology reduces project timelines and gets you up and running quickly.",
   },
   {
     icon: <ShieldCheck className="h-8 w-8 text-primary" />,
     title: "Secure Systems",
-    description: "We build robust security protocols into every implementation to protect your valuable business data."
+    description:
+      "We build robust security protocols into every implementation to protect your valuable business data.",
   },
   {
     icon: <Globe2 className="h-8 w-8 text-primary" />,
     title: "Global Support",
-    description: "Round-the-clock support for your SAP systems from our team of experts located around the world."
+    description:
+      "Round-the-clock support for your SAP systems from our team of experts located around the world.",
   },
   {
     icon: <Workflow className="h-8 w-8 text-primary" />,
     title: "Process Optimization",
-    description: "We streamline your business processes through intelligent automation and SAP best practices."
+    description:
+      "We streamline your business processes through intelligent automation and SAP best practices.",
   },
   {
     icon: <HeartHandshake className="h-8 w-8 text-primary" />,
     title: "Long-Term Partnership",
-    description: "We're committed to your success beyond implementation with ongoing support and strategic guidance."
-  }
+    description:
+      "We're committed to your success beyond implementation with ongoing support and strategic guidance.",
+  },
 ];
 
 // Feature Card Component
@@ -62,33 +70,33 @@ function FeatureCard({ icon, title, description, index }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <motion.div
+    <div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
         delay: index * 0.1,
         duration: 0.5,
-        ease: "easeOut"
+        ease: "easeOut",
       }}
       whileHover={{
         y: -10,
-        transition: { duration: 0.3 }
+        transition: { duration: 0.3 },
       }}
       className="relative perspective"
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <motion.div
+      <div
         className="group p-6 rounded-xl dark:bg-background/60 border border-border/50 hover:border-primary/50 hover:shadow-xl transition-all duration-500 h-full backdrop-blur-sm relative overflow-hidden"
         animate={{
           rotateX: isHovered ? 5 : 0,
           rotateY: isHovered ? 5 : 0,
-          z: isHovered ? 10 : 0
+          z: isHovered ? 10 : 0,
         }}
         transition={{
           type: "spring",
           stiffness: 300,
-          damping: 15
+          damping: 15,
         }}
       >
         {/* Background gradient effect */}
@@ -98,59 +106,59 @@ function FeatureCard({ icon, title, description, index }) {
         <div className="absolute inset-0 rounded-xl border border-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
 
         {/* Icon container with 3D pop and glow effect */}
-        <motion.div
-          className="p-3 bg-primary/10 rounded-lg w-fit mb-4 group-hover:bg-primary/20 transition-colors duration-300 relative"
+        <div
+          className="p-3 bg-primary/10 rounded-lg w-fit mb-4 group-hover:bg-primary/20 transition-colors duration-300 relative hover:scale-105 transition-transform duration-300"
           whileHover={{
-            scale: 1.1,
+            // scale: 1.1,
             rotateZ: [0, -5, 5, 0],
-            transition: { duration: 0.5 }
+            transition: { duration: 0.5 },
           }}
         >
           {/* Glow effect on hover */}
           <div className="absolute inset-0 rounded-lg bg-primary/30 blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
 
           {/* Icon with animation */}
-          <motion.div
+          <div
             animate={{
               scale: isHovered ? 1.1 : 1,
-              rotate: isHovered ? [0, 10, -10, 0] : 0
+              rotate: isHovered ? [0, 10, -10, 0] : 0,
             }}
             transition={{
               duration: 0.5,
               ease: "easeInOut",
-              times: [0, 0.3, 0.6, 1]
+              times: [0, 0.3, 0.6, 1],
             }}
             className="relative z-10"
           >
             {icon}
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* Content with animations */}
-        <motion.h3
+        <h3
           className="text-xl font-semibold mb-2 text-3d group-hover:text-primary transition-colors duration-300"
           animate={{
-            x: isHovered ? 3 : 0
+            x: isHovered ? 3 : 0,
           }}
           transition={{ duration: 0.3 }}
         >
           {title}
-        </motion.h3>
-        <motion.p
+        </h3>
+        <p
           className="text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300"
           animate={{
             x: isHovered ? 5 : 0,
-            opacity: isHovered ? 1 : 0.9
+            opacity: isHovered ? 1 : 0.9,
           }}
           transition={{ duration: 0.4, delay: 0.1 }}
         >
           {description}
-        </motion.p>
+        </p>
 
         {/* Corner accent */}
         <div className="absolute top-0 right-0 w-0 h-0 border-t-[40px] border-r-[40px] border-t-transparent border-r-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
@@ -182,91 +190,82 @@ export default function FeaturesSection() {
   return (
     <section className="pt-6 pb-8 md:pt-8 md:pb-8/30 relative overflow-hidden">
       {/* Dynamic background effects */}
-      <motion.div
+      <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-primary/5 rounded-full blur-3xl opacity-70 pointer-events-none"
         animate={{
           scale: [1, 1.05, 1],
-          opacity: [0.6, 0.8, 0.6]
+          opacity: [0.6, 0.8, 0.6],
         }}
         transition={{
           duration: 15,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: "easeInOut",
         }}
-      ></motion.div>
+      ></div>
       <div className="absolute inset-0 bg-grid-pattern opacity-[0.015] pointer-events-none"></div>
 
       {/* Floating decoration elements */}
-      <motion.div
+      <div
         className="absolute top-10 right-20 w-32 h-32 rounded-full border border-primary/10 opacity-10 pointer-events-none"
         animate={{
           y: [-10, 10, -10],
           x: [5, -5, 5],
-          rotate: [0, 180, 360]
+          rotate: [0, 180, 360],
         }}
         transition={{
           duration: 20,
           repeat: Infinity,
-          ease: "linear"
+          ease: "linear",
         }}
-      ></motion.div>
-      <motion.div
+      ></div>
+      <div
         className="absolute bottom-40 left-20 w-20 h-20 rounded-md border border-primary/10 opacity-10 pointer-events-none"
         animate={{
           y: [10, -10, 10],
           x: [-5, 5, -5],
-          rotate: [0, -180, -360]
+          rotate: [0, -180, -360],
         }}
         transition={{
           duration: 25,
           repeat: Infinity,
-          ease: "linear"
+          ease: "linear",
         }}
-      ></motion.div>
+      ></div>
 
-      <motion.div
+      <div
         className="container-custom relative z-10"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
         variants={containerVariants}
       >
-     
-     
-    {/* Section header */}
-{/* <motion.div
+        {/* Section header */}
+        {/* <div
   className="text-center max-w-xl mx-auto mb-6 md:mb-5"
   variants={itemVariants}
 > */}
 
-  <motion.div
+        <div
           className="text-center max-w-2xl mx-auto mb-16"
           variants={itemVariants}
         >
-  {/* Badge */}
-  <div className="inline-flex items-center justify-center rounded-full bg-primary/10 px-3 py-1 text-xs sm:text-sm font-medium text-primary mb-1.5">
-    <span className="flex h-2 w-2 rounded-full bg-primary mr-2"></span>
-    Why Choose Us
-  </div>
+          {/* Badge */}
+          <div className="inline-flex items-center justify-center rounded-full bg-primary/10 px-3 py-1 text-xs sm:text-sm font-medium text-primary mb-1.5">
+            <span className="flex h-2 w-2 rounded-full bg-primary mr-2"></span>
+            Why Choose Us
+          </div>
 
- 
+          {/* Title */}
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-1.5">
+            Our Capabilities
+          </h2>
 
-  {/* Title */}
-  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-1.5">
-    Our Capabilities
-  </h2>
-
-  {/* Description */}
-  <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mx-auto">
-    We combine deep SAP expertise with innovation to deliver solutions that
-    drive business transformation and create lasting value.
-  </p>
-</motion.div>
-
-
-
-
-        
+          {/* Description */}
+          <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mx-auto">
+            We combine deep SAP expertise with innovation to deliver solutions
+            that drive business transformation and create lasting value.
+          </p>
+        </div>
 
         {/* Features grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-justify">
@@ -280,7 +279,7 @@ export default function FeaturesSection() {
             />
           ))}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

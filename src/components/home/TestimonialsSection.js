@@ -46,14 +46,14 @@ export default function TestimonialsSection() {
   const [autoplay, setAutoplay] = useState(true);
   const timeoutRef = useRef(null);
 
-  useEffect(() => {
-    if (autoplay) {
-      timeoutRef.current = setTimeout(() => {
-        setCurrent((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
-      }, 5000);
-    }
-    return () => clearTimeout(timeoutRef.current);
-  }, [current, autoplay]);
+  // useEffect(() => {
+  //   if (autoplay) {
+  //     timeoutRef.current = setTimeout(() => {
+  //       setCurrent((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+  //     }, 5000);
+  //   }
+  //   return () => clearTimeout(timeoutRef.current);
+  // }, [current, autoplay]);
 
   const goToNext = () => {
     setCurrent((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));

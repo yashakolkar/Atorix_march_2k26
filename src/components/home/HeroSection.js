@@ -56,270 +56,292 @@ export default function HeroSection() {
 
         {/* Square geometric pattern */}
         <div className="absolute inset-0">
-          <svg
+          {/* <svg
             width="100%"
             height="100%"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
             className="opacity-20"
-          >
-            {/* Pattern definition */}
-            <defs>
-              {/* Small squares pattern */}
-              <pattern
-                id="small-squares"
+          > */}
+          <section className="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div className="container mx-auto text-center">
+              <h1 className="text-3xl md:text-5xl font-bold mb-4">
+                Transform Your Business with SAP Solutions
+              </h1>
+              <p className="text-lg text-white/80 mb-6">
+                Scalable, secure and high-performance IT solutions for modern
+                enterprises.
+              </p>
+            </div>
+          </section>
+          {/* Pattern definition */}
+          <defs>
+            {/* Small squares pattern */}
+            <pattern
+              id="small-squares"
+              x="0"
+              y="0"
+              width="10"
+              height="10"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(15)"
+            >
+              <rect
                 x="0"
                 y="0"
-                width="10"
-                height="10"
-                patternUnits="userSpaceOnUse"
-                patternTransform="rotate(15)"
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="3"
-                  height="3"
-                  fill="currentColor"
-                  className="text-primary/30"
-                />
-              </pattern>
+                width="3"
+                height="3"
+                fill="currentColor"
+                className="text-primary/30"
+              />
+            </pattern>
 
-              {/* Medium squares pattern */}
-              <pattern
-                id="medium-squares"
+            {/* Medium squares pattern */}
+            <pattern
+              id="medium-squares"
+              x="5"
+              y="5"
+              width="20"
+              height="20"
+              patternUnits="userSpaceOnUse"
+            >
+              <rect
+                x="0"
+                y="0"
+                width="5"
+                height="5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.3"
+                className="text-primary/40"
+              />
+            </pattern>
+
+            {/* Larger squares for accent */}
+            <pattern
+              id="large-squares"
+              x="0"
+              y="0"
+              width="50"
+              height="50"
+              patternUnits="userSpaceOnUse"
+            >
+              <rect
                 x="5"
                 y="5"
                 width="20"
                 height="20"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="5"
-                  height="5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="0.3"
-                  className="text-primary/40"
-                />
-              </pattern>
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.5"
+                className="text-primary/20"
+              />
+              <rect
+                x="30"
+                y="30"
+                width="15"
+                height="15"
+                fill="currentColor"
+                className="text-primary/10"
+              />
+            </pattern>
 
-              {/* Larger squares for accent */}
-              <pattern
-                id="large-squares"
-                x="0"
-                y="0"
-                width="50"
-                height="50"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect
-                  x="5"
-                  y="5"
-                  width="20"
-                  height="20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="0.5"
-                  className="text-primary/20"
-                />
-                <rect
-                  x="30"
-                  y="30"
-                  width="15"
-                  height="15"
-                  fill="currentColor"
-                  className="text-primary/10"
-                />
-              </pattern>
+            {/* Scattered tiny squares */}
+            <pattern
+              id="scattered-squares"
+              x="0"
+              y="0"
+              width="100"
+              height="100"
+              patternUnits="userSpaceOnUse"
+            >
+              <rect
+                x="10"
+                y="10"
+                width="2"
+                height="2"
+                fill="currentColor"
+                className="text-primary/40"
+              />
+              <rect
+                x="30"
+                y="25"
+                width="1"
+                height="1"
+                fill="currentColor"
+                className="text-primary/50"
+              />
+              <rect
+                x="70"
+                y="60"
+                width="3"
+                height="3"
+                fill="currentColor"
+                className="text-primary/40"
+              />
+              <rect
+                x="40"
+                y="80"
+                width="2"
+                height="2"
+                fill="currentColor"
+                className="text-primary/50"
+              />
+              <rect
+                x="80"
+                y="15"
+                width="1"
+                height="1"
+                fill="currentColor"
+                className="text-primary/40"
+              />
+              <rect
+                x="85"
+                y="85"
+                width="3"
+                height="3"
+                fill="currentColor"
+                className="text-primary/30"
+              />
+              <rect
+                x="20"
+                y="60"
+                width="2"
+                height="2"
+                fill="currentColor"
+                className="text-primary/45"
+              />
+              <rect
+                x="65"
+                y="35"
+                width="2"
+                height="2"
+                fill="currentColor"
+                className="text-primary/40"
+              />
+            </pattern>
+          </defs>
 
-              {/* Scattered tiny squares */}
-              <pattern
-                id="scattered-squares"
-                x="0"
-                y="0"
-                width="100"
-                height="100"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect
-                  x="10"
-                  y="10"
-                  width="2"
-                  height="2"
-                  fill="currentColor"
-                  className="text-primary/40"
-                />
-                <rect
-                  x="30"
-                  y="25"
-                  width="1"
-                  height="1"
-                  fill="currentColor"
-                  className="text-primary/50"
-                />
-                <rect
-                  x="70"
-                  y="60"
-                  width="3"
-                  height="3"
-                  fill="currentColor"
-                  className="text-primary/40"
-                />
-                <rect
-                  x="40"
-                  y="80"
-                  width="2"
-                  height="2"
-                  fill="currentColor"
-                  className="text-primary/50"
-                />
-                <rect
-                  x="80"
-                  y="15"
-                  width="1"
-                  height="1"
-                  fill="currentColor"
-                  className="text-primary/40"
-                />
-                <rect
-                  x="85"
-                  y="85"
-                  width="3"
-                  height="3"
-                  fill="currentColor"
-                  className="text-primary/30"
-                />
-                <rect
-                  x="20"
-                  y="60"
-                  width="2"
-                  height="2"
-                  fill="currentColor"
-                  className="text-primary/45"
-                />
-                <rect
-                  x="65"
-                  y="35"
-                  width="2"
-                  height="2"
-                  fill="currentColor"
-                  className="text-primary/40"
-                />
-              </pattern>
-            </defs>
-
-            {/* Apply patterns */}
-            <rect width="100%" height="100%" fill="url(#small-squares)" />
-            <rect width="100%" height="100%" fill="url(#medium-squares)" />
-            <rect width="100%" height="100%" fill="url(#large-squares)" />
-            <rect width="100%" height="100%" fill="url(#scattered-squares)" />
-          </svg>
+          {/* Apply patterns */}
+          <rect width="100%" height="100%" fill="url(#small-squares)" />
+          <rect width="100%" height="100%" fill="url(#medium-squares)" />
+          <rect width="100%" height="100%" fill="url(#large-squares)" />
+          <rect width="100%" height="100%" fill="url(#scattered-squares)" />
+          {/* </svg> */}
         </div>
 
         {/* Angular squares overlay */}
         <div className="absolute inset-0 opacity-10">
-          <svg
+          {/* <svg
             width="100%"
             height="100%"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
-          >
-            <rect
-              x="10"
-              y="10"
-              width="5"
-              height="5"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(15)"
-            />
-            <rect
-              x="25"
-              y="20"
-              width="4"
-              height="4"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(30)"
-            />
-            <rect
-              x="50"
-              y="15"
-              width="6"
-              height="6"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(45)"
-            />
-            <rect
-              x="75"
-              y="25"
-              width="3"
-              height="3"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(60)"
-            />
-            <rect
-              x="15"
-              y="45"
-              width="4"
-              height="4"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(15)"
-            />
-            <rect
-              x="35"
-              y="55"
-              width="5"
-              height="5"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(30)"
-            />
-            <rect
-              x="70"
-              y="60"
-              width="3"
-              height="3"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(45)"
-            />
-            <rect
-              x="20"
-              y="80"
-              width="6"
-              height="6"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(20)"
-            />
-            <rect
-              x="55"
-              y="85"
-              width="4"
-              height="4"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(30)"
-            />
-            <rect
-              x="85"
-              y="75"
-              width="5"
-              height="5"
-              fill="currentColor"
-              className="text-primary"
-              transform="rotate(15)"
-            />
-          </svg>
+          > */}
+          <section className="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+            <div className="container mx-auto text-center">
+              <h1 className="text-3xl md:text-5xl font-bold mb-4">
+                Transform Your Business with SAP Solutions
+              </h1>
+              <p className="text-lg text-white/80 mb-6">
+                Scalable, secure and high-performance IT solutions for modern
+                enterprises.
+              </p>
+            </div>
+          </section>
+          <rect
+            x="10"
+            y="10"
+            width="5"
+            height="5"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(15)"
+          />
+          <rect
+            x="25"
+            y="20"
+            width="4"
+            height="4"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(30)"
+          />
+          <rect
+            x="50"
+            y="15"
+            width="6"
+            height="6"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(45)"
+          />
+          <rect
+            x="75"
+            y="25"
+            width="3"
+            height="3"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(60)"
+          />
+          <rect
+            x="15"
+            y="45"
+            width="4"
+            height="4"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(15)"
+          />
+          <rect
+            x="35"
+            y="55"
+            width="5"
+            height="5"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(30)"
+          />
+          <rect
+            x="70"
+            y="60"
+            width="3"
+            height="3"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(45)"
+          />
+          <rect
+            x="20"
+            y="80"
+            width="6"
+            height="6"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(20)"
+          />
+          <rect
+            x="55"
+            y="85"
+            width="4"
+            height="4"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(30)"
+          />
+          <rect
+            x="85"
+            y="75"
+            width="5"
+            height="5"
+            fill="currentColor"
+            className="text-primary"
+            transform="rotate(15)"
+          />
+          {/* </svg> */}
         </div>
       </div>
 
