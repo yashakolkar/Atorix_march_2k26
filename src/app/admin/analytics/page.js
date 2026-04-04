@@ -25,8 +25,6 @@ import {
 } from "recharts";
 import useLeadDistribution from "./useLeadDistribution";
 
-/* ---------------- Lead Distribution Card ---------------- */
-
 function LeadStatusDistribution() {
   const { segments, total, radius, circumference, loading, refresh } =
     useLeadDistribution();
