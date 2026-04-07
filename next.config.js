@@ -1,4 +1,3 @@
-
 const withPWA = require("next-pwa")({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
@@ -10,6 +9,7 @@ const withPWA = require("next-pwa")({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
 
   // ─── Remove console.log in production ──────────────────────
   compiler: {
@@ -28,7 +28,7 @@ const nextConfig = {
       "date-fns",
       "react-hook-form",
     ],
-    serverActions: {}, // ✅ FIXED
+    serverActions: true,
   },
 
   // ─── Image optimization ────────────────────────────────────
@@ -36,7 +36,7 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 31536000,
+    minimumCacheTTL: 31536000, // 1 year cache
     domains: [
       "source.unsplash.com",
       "images.unsplash.com",
@@ -44,11 +44,30 @@ const nextConfig = {
       "ugc.same-assets.com",
     ],
     remotePatterns: [
-      { protocol: "https", hostname: "source.unsplash.com", pathname: "/**" },
-      { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
-      { protocol: "https", hostname: "ext.same-assets.com", pathname: "/**" },
-      { protocol: "https", hostname: "ugc.same-assets.com", pathname: "/**" },
-      { protocol: "https", hostname: "**" },
+      {
+        protocol: "https",
+        hostname: "source.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ext.same-assets.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ugc.same-assets.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
   },
 
@@ -64,6 +83,7 @@ const nextConfig = {
           },
         ],
       },
+      // ✅ Cache JS/CSS chunks for 1 year (they have hashed filenames)
       {
         source: "/_next/static/:path*",
         headers: [
@@ -72,62 +92,6 @@ const nextConfig = {
             value: "public, max-age=31536000, immutable",
           },
         ],
-      },
-    ];
-  },
-
-  // ─── Redirects (SEO - 301 Permanent) ───────────────────────
-  async redirects() {
-    return [
-      {
-        source: "/about-us",
-        destination: "/about",
-        permanent: true,
-      },
-      {
-        source: "/contact-us",
-        destination: "/contact",
-        permanent: true,
-      },
-      {
-        source: "/careers",
-        destination: "/career",
-        permanent: true,
-      },
-      {
-        source: "/service",
-        destination: "/services",
-        permanent: true,
-      },
-      {
-        source: "/demo",
-        destination: "/get-demo",
-        permanent: true,
-      },
-      {
-        source: "/getdemo",
-        destination: "/get-demo",
-        permanent: true,
-      },
-      {
-        source: "/blogs",
-        destination: "/blog",
-        permanent: true,
-      },
-      {
-        source: "/privacy-policy",
-        destination: "/privacy",
-        permanent: true,
-      },
-      {
-        source: "/terms-and-conditions",
-        destination: "/terms",
-        permanent: true,
-      },
-      {
-        source: "/:path*/",
-        destination: "/:path*",
-        permanent: true,
       },
     ];
   },
@@ -142,12 +106,14 @@ const nextConfig = {
         tls: false,
       };
 
+      // Better chunk splitting for caching
       config.optimization.splitChunks = {
         chunks: "all",
         maxInitialRequests: 30,
         minSize: 15000,
-        maxSize: 200000,
+        maxSize: 200000, // ✅ Break large chunks into ≤200KB pieces
         cacheGroups: {
+          // Separate heavy libs into their own chunks
           framework: {
             name: "framework",
             test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
@@ -158,24 +124,25 @@ const nextConfig = {
           framerMotion: {
             name: "framer-motion",
             test: /[\\/]node_modules[\\/](framer-motion)[\\/]/,
-            chunks: "async",
+            chunks: "async", // ✅ Changed to async — only load when needed
             priority: 30,
             enforce: true,
           },
           threeJs: {
             name: "three-js",
             test: /[\\/]node_modules[\\/](@react-three|three)[\\/]/,
-            chunks: "async",
+            chunks: "async", // ✅ Changed to async — 3D is never needed on first paint
             priority: 30,
             enforce: true,
           },
           recharts: {
             name: "recharts",
             test: /[\\/]node_modules[\\/](recharts|d3-.*)[\\/]/,
-            chunks: "async",
+            chunks: "async", // ✅ Changed to async
             priority: 30,
             enforce: true,
           },
+          // ✅ Separate mongoose/openai (server-only, should not be in client bundle)
           serverOnly: {
             name: "server-only",
             test: /[\\/]node_modules[\\/](mongoose|openai)[\\/]/,
